@@ -1,5 +1,5 @@
 from formula import parse_formula
-
+import sys
 def make_periodic_table():
     periodic_table_dict = {
     # symbol: [name, atomic_mass]
@@ -100,22 +100,71 @@ def make_periodic_table():
 }
     return(periodic_table_dict)
 
+known_molecules_dict = {
+        "Al2O3": "aluminum oxide",
+        "CH3OH": "methanol",
+        "C2H6O": "ethanol",
+        "C2H5OH": "ethanol",
+        "C3H8O": "isopropyl alcohol",
+        "C3H8": "propane",
+        "C4H10": "butane",
+        "C6H6": "benzene",
+        "C6H14": "hexane",
+        "C8H18": "octane",
+        "CH3(CH2)6CH3": "octane",
+        "C13H18O2": "ibuprofen",
+        "C13H16N2O2": "melatonin",
+        "Fe2O3": "iron oxide",
+        "FeS2": "iron pyrite",
+        "H2O": "water"
+    }
 #--------------Function Creation---------------
 
+def get_formula_name(formula, known_molecules_dict):
+    
+    try:
+        sample_name_formula = known_molecules_dict[formula]
+    except KeyError:
+        sample_name_formula = "None exsistent formula name"
+
+
+    return sample_name_formula
 
 def main():
-    array_periodic_table = make_periodic_table()
 
-# -------------Search for positions-------------    
-    # print(array_periodic_table[0][1], array_periodic_table[0][2])
-    # print(array_periodic_table[1][1], array_periodic_table[1][2])
+    # Verificar si pytest está ejecutando el script
+    if not any('pytest' in arg for arg in sys.argv):
+        user_formual  = input("Please insert formula: ")
+    
+        user_mass_grams = float(input("Enter the mass in grams of the sample: "))
 
-    # for array_one_periodic_table in array_periodic_table:
-    #     print(f'{array_one_periodic_table[1]} {array_one_periodic_table[2]}')
+    else:
+        # En pruebas, podrías usar un valor predeterminado o saltar esta parte
+        print("No se solicitará la fórmula durante las pruebas.")
+        user_formual = "H2O"  # Ejemplo de fórmula predeterminada para pruebas
+        user_mass_grams = 18.015
 
-# ------------Function Ejecuxtion------------
-dict_periodic_table = make_periodic_table()
-formula_and_list = parse_formula('C6H12O6', dict_periodic_table)
+    dict_periodic_table = make_periodic_table()
+    formula_and_list = parse_formula(user_formual, dict_periodic_table)
+    molar_mass_calculation = compute_molar_mass(formula_and_list, dict_periodic_table)
+    number_of_moles = user_mass_grams/molar_mass_calculation
+    print(f"{round(molar_mass_calculation, 5)} grams/moles")
+    print(f"{round(number_of_moles, 5)} moles")
+    
+    print(get_formula_name(user_formual, known_molecules_dict))
+
+
+
+
+
+
+
+
+
+
+
+
+
 # print(formula_and_list)
 
 # Indexes for inner lists in the periodic table
@@ -132,37 +181,13 @@ def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
     molar_mass=0
 
     for one_symbol_quantity_list in symbol_quantity_list:
-        print(one_symbol_quantity_list)
-
-
-
-
-    symbol_quantity_list_1 = symbol_quantity_list[0][0]
-    symbol_quantity_list_number =float(symbol_quantity_list[0][1])
-    element_table_mass = float(periodic_table_dict[symbol_quantity_list_1][1])
-    print(element_table_mass)
-    print(symbol_quantity_list_number)
-    mass_molar_element_1=element_table_mass*symbol_quantity_list_number
-    print(mass_molar_element_1)
+        symbol = one_symbol_quantity_list[0]
+        symbol_atomic_mass =  one_symbol_quantity_list[1]
+        atomic_table_mass = periodic_table_dict[symbol][1]
+        calculation_atomic_mass = symbol_atomic_mass * atomic_table_mass
+        molar_mass += calculation_atomic_mass
+        
     
-
-    """Compute and return the total molar mass of all the
-    elements listed in symbol_quantity_list.
-    Parameters
-        symbol_quantity_list is a compound list returned
-            from the parse_formula function. Each small
-            list in symbol_quantity_list has this form:
-            ["symbol", quantity].
-        periodic_table_dict is the compound dictionary
-            returned from make_periodic_table.
-    Return: the total molar mass of all the elements in
-        symbol_quantity_list.
-    For example, if symbol_quantity_list is [["H", 2], ["O", 1]],
-    this function will calculate and return
-    atomic_mass("H") * 2 + atomic_mass("O") * 1
-    1.00794 * 2 + 15.9994 * 1
-    18.01528
-    """
     # Do the following for each inner list in the
     # compound symbol_quantity_list:
         # Separate the inner list into symbol and quantity.
@@ -172,7 +197,7 @@ def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
     # Return the total molar mass.
     return molar_mass
 
-compute_molar_mass(formula_and_list, dict_periodic_table)
+# compute_molar_mass(formula_and_list, dict_periodic_table)
 
 
 
@@ -181,5 +206,6 @@ compute_molar_mass(formula_and_list, dict_periodic_table)
 
 
 main()
+
 
 
