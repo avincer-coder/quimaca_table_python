@@ -1,3 +1,6 @@
+# -----------------Exceeding the Requirements----------
+# I added a dictionary that contains known chemical formulas and their names as the example shown
+
 from formula import parse_formula
 import sys
 def make_periodic_table():
@@ -100,6 +103,7 @@ def make_periodic_table():
 }
     return(periodic_table_dict)
 
+# -----------------Exceeding the Requirements----------
 known_molecules_dict = {
         "Al2O3": "aluminum oxide",
         "CH3OH": "methanol",
@@ -120,6 +124,7 @@ known_molecules_dict = {
     }
 #--------------Function Creation---------------
 
+# -----------------Exceeding the Requirements----------
 def get_formula_name(formula, known_molecules_dict):
     
     try:
@@ -129,6 +134,8 @@ def get_formula_name(formula, known_molecules_dict):
 
 
     return sample_name_formula
+
+
 
 def main():
 
