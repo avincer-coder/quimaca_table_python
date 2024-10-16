@@ -97,5 +97,14 @@ def make_periodic_table():
 ]
     return(periodic_table_list)
 
+def main():
+    array_periodic_table = make_periodic_table()
 
-print(make_periodic_table())
+# -------------Search for positions-------------    
+    # print(array_periodic_table[0][1], array_periodic_table[0][2])
+    # print(array_periodic_table[1][1], array_periodic_table[1][2])
+
+    for array_one_periodic_table in array_periodic_table:
+        print(f'{array_one_periodic_table[1]} {array_one_periodic_table[2]}')
+
+main()
